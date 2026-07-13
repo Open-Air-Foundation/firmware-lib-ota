@@ -29,17 +29,18 @@ void AirgradientOTA::sendCallback(OtaResult result, const char *message) {
 }
 
 std::string AirgradientOTA::buildUrl(const std::string &sn, const std::string &currentFirmware,
-                                     std::string httpDomain) {
+                                     std::string httpDomain, bool useHttps) {
   // NOTE: Careful here when changing the url
   char url[200] = {0};
+  const char *scheme = useHttps ? "https" : "http";
 #ifdef ARDUINO
   // OneOpenAir
-  sprintf(url, "http://%s/sensors/airgradient:%s/generic/os/firmware.bin?current_firmware=%s",
-          httpDomain.c_str(), sn.c_str(), currentFirmware.c_str());
+  sprintf(url, "%s://%s/sensors/airgradient:%s/generic/os/firmware.bin?current_firmware=%s",
+          scheme, httpDomain.c_str(), sn.c_str(), currentFirmware.c_str());
 #else
   // OpenAir MAX
-  sprintf(url, "http://%s/sensors/%s/max/firmware.bin?current_firmware=%s", httpDomain.c_str(),
-          sn.c_str(), currentFirmware.c_str());
+  sprintf(url, "%s://%s/sensors/%s/max/firmware.bin?current_firmware=%s", scheme,
+          httpDomain.c_str(), sn.c_str(), currentFirmware.c_str());
 #endif
 
   return std::string(url);

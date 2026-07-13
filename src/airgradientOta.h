@@ -10,12 +10,16 @@
 
 #ifndef ESP8266
 
-#define AIRGRADIENT_HTTP_DOMAIN "hw.airgradient.com"
-
 #include <cstdint>
 #include <string>
 
 #include "esp_ota_ops.h"
+
+#ifdef ARDUINO
+#include "Libraries/airgradient-client/src/airgradientServerConfig.h"
+#else
+#include "airgradientServerConfig.h"
+#endif
 
 class AirgradientOTA {
 private:
@@ -45,7 +49,8 @@ protected:
   int imageWritten = 0;
 
   void sendCallback(OtaResult result, const char *message);
-  std::string buildUrl(const std::string &sn, const std::string &currentFirmware, std::string httpDomain);
+  std::string buildUrl(const std::string &sn, const std::string &currentFirmware,
+                       std::string httpDomain, bool useHttps = false);
   bool init();
   bool write(const char *data, int size);
   bool finish();
