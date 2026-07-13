@@ -25,11 +25,12 @@ AirgradientOTA::OtaResult AirgradientOTAWifi::updateIfAvailable(const std::strin
                                                                 const std::string &currentFirmware,
                                                                 std::string httpDomain) {
   // Format the base url
-  std::string url = buildUrl(sn, currentFirmware, httpDomain);
+  std::string url = buildUrl(sn, currentFirmware, httpDomain, true);
   AG_LOGI(TAG, "%s", url.c_str());
 
   // Initialize http configuration
   _httpConfig.url = url.c_str();
+  _httpConfig.cert_pem = AirgradientServerConfig::AG_SERVER_ROOT_CA;
 
   // Initialize http client
   _httpClient = esp_http_client_init(&_httpConfig);
